@@ -1,7 +1,17 @@
 <html>
   <body>
     <div>
-      @@report@@
+      <script>
+        function func(){
+          let xhr = new XMLHttpRequest()
+          xhr.open('GET', 'https://api.wp-checker.com/scan?url=http://unravelling-the-world.com/')
+          xhr.addEventListener('load', (evt) =>{
+            console.log(evt)
+          })
+          xhr.send()
+        }
+
+      </script>
     </div>
   </body>
 </html>

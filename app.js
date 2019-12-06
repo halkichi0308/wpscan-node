@@ -2,6 +2,7 @@ const express = require('express')
 const exec = require('child_process').execSync;
 const fs = require('fs')
 const app = express()
+const log_file = './log/console.log'
 
 const port = 80
 app.get('/ack', (req, res) => {
@@ -25,13 +26,16 @@ app.get('/scan', (req, res) => {
       res.send(200, 'bad url format')
     }else{
       let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
-      console.log(exec_query)
+      console.log(exec_query);fs.writeFileSync(log_file, exec_query)
       let scan_result_json = exec(exec_query).toString()
       res.header({'Content-type': 'application/json'})
+      res.header('Access-Control-Allow-Origin', '*')
+      res.header('Access-Control-Allow-Methods', 'GET,POST')
+      res.header('Access-Control-Allow-Headers', 'Content-Type')
       res.send(200, scan_result_json)
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);fs.writeFileSync(log_file, err)
     res.send(200, 'bad url format')
   }
 
