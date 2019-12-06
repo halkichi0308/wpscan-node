@@ -20,9 +20,9 @@ app.get('/scan', (req, res) => {
   //let template_html = fs.readFileSync('./html/template.html').toString()
   let exec_query = `docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
   console.log(exec_query)
-  let scan_result = exec(exec_query).toString()
+  let scan_result_json = exec(exec_query).toString()
   res.header({'Content-type': 'application/json'})
-  res.send(200, result)
+  res.send(200, scan_result_json)
 })
 
 app.listen(port)
