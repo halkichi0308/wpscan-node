@@ -1,4 +1,4 @@
-const reports = `
+const scan_result = `
 [+] http://host.docker.internal:8080/xmlrpc.php
  | Found By: Direct Access (Aggressive Detection)
  | Confidence: 100%
@@ -19,7 +19,9 @@ const reports = `
  | References:
  |  - https://www.iplocation.net/defend-wordpress-from-ddos
  |  - https://github.com/wpscanteam/wpscan/issues/1299
-
 `
-let dumped = reports.match(/^(\[\+\].*?)$/g)
+let dumped = scan_result.replace(/^(\[.*?)$/mg,(match)=>{
+  return `<h3>${match}</h3>`
+})
+
 console.log(dumped)
