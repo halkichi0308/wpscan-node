@@ -3,7 +3,7 @@ const exec = require('child_process').execSync;
 const fs = require('fs')
 const app = express()
 
-const port = 3000
+const port = 80
 app.get('/ack', (req, res) => {
   if(req.method === 'GET'){
     res.send(200, 'instance ok!')
@@ -18,8 +18,8 @@ app.options('*',(req, res)=>{
 
 app.get('/scan', (req, res) => {
   let valid_regExp = /^http(s)?:\/\/([\w-]+\.)+[\w-]+([\w-./?%&=]*)?/
-  let valid_url_chars = /[;|(%3A|%3B|%7C|%3a%3b|%7c)]/
-  if(req.query.url.match(valid_regExp) === null || req.query.url.match(valid_url_chars)){
+  let valid_url_chars = /[;\|]/
+  if(req.query.url.match(valid_regExp) === null || req.query.url.match(valid_url_chars) !== null){
     res.send(200, 'bad url format')
   }else{
     let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
