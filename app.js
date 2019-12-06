@@ -4,6 +4,9 @@ const fs = require('fs')
 const app = express()
 const log_file = './log/console.log'
 
+const access_limit = 100
+app.locals.access_count = 0
+
 const port = 80
 app.get('/ack', (req, res) => {
   if(req.method === 'GET'){
@@ -29,10 +32,15 @@ app.get('/scan', (req, res) => {
     if(req.query.url.match(valid_regExp) === null || req.query.url.match(valid_url_chars) !== null){
       res.send(400, 'bad url format')
     }else{
-      let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
-      console.log(exec_query);fs.writeFileSync(log_file, exec_query)
-      let scan_result_json = exec(exec_query).toString()
-      res.send(200, scan_result_json)
+      if(app.locals.access_count < access_limit){
+        let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
+        console.log(exec_query);fs.writeFileSync(log_file, exec_query)
+        let scan_result_json = exec(exec_query).toString()
+        res.send(200, scan_result_json)
+        app.locals.access_count++ 
+      }else{
+        res.send(200, 'Sorry, Please come again tomorrow!!')
+      }
     }
   } catch (err) {
     console.log(err);fs.writeFileSync(log_file, err)
