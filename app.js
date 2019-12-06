@@ -20,23 +20,23 @@ app.options('*',(req, res)=>{
 app.get('/scan', (req, res) => {
   let valid_regExp = /^http(s)?:\/\/([\w-]+\.)+[\w-]+([\w-./?%&=]*)?/
   let valid_url_chars = /[;\|{}$]/
-  try {
+  res.header({'Content-type': 'application/json'})
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,POST')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
 
+  try {
     if(req.query.url.match(valid_regExp) === null || req.query.url.match(valid_url_chars) !== null){
-      res.send(200, 'bad url format')
+      res.send(400, 'bad url format')
     }else{
       let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
       console.log(exec_query);fs.writeFileSync(log_file, exec_query)
       let scan_result_json = exec(exec_query).toString()
-      res.header({'Content-type': 'application/json'})
-      res.header('Access-Control-Allow-Origin', '*')
-      res.header('Access-Control-Allow-Methods', 'GET,POST')
-      res.header('Access-Control-Allow-Headers', 'Content-Type')
       res.send(200, scan_result_json)
     }
   } catch (err) {
     console.log(err);fs.writeFileSync(log_file, err)
-    res.send(200, 'bad url format')
+    res.send(400, 'bad url format')
   }
 
 })
