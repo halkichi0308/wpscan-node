@@ -19,11 +19,17 @@ app.options('*',(req, res)=>{
 app.get('/scan', (req, res) => {
   //let template_html = fs.readFileSync('./html/template.html').toString()
   let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
-  if(match(/^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?/) )
-  console.log(exec_query)
-  let scan_result_json = exec(exec_query).toString()
-  res.header({'Content-type': 'application/json'})
-  res.send(200, scan_result_json)
+  let valid_regExp = /^http(s)?:\/\/([\w-]+\.)+[\w-]+([\w-./?%&=]*)?/
+  let valid_url_chars = /[;|]/
+  if(req.query.url.match(valid_regExp) === null || req.query.url.match(valid_url_chars)){
+    res.send(200, 'bad url format')
+  }else{
+    console.log(exec_query)
+    let scan_result_json = exec(exec_query).toString()
+    res.header({'Content-type': 'application/json'})
+    res.send(200, scan_result_json)
+  }
+
 })
 
 app.listen(port)
