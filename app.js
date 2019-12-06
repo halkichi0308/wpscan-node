@@ -3,7 +3,7 @@ const exec = require('child_process').execSync;
 const fs = require('fs')
 const app = express()
 
-const port = 3000
+const port = 443
 app.get('/ack', (req, res) => {
   if(req.method === 'GET'){
     res.send(200, 'instance ok!')
@@ -18,7 +18,8 @@ app.options('*',(req, res)=>{
 
 app.get('/scan', (req, res) => {
   //let template_html = fs.readFileSync('./html/template.html').toString()
-  let exec_query = `docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
+  let exec_query = `sudo docker run -t wpscanteam/wpscan --url ${req.query.url} -f json`
+  if(match(/^http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?/) )
   console.log(exec_query)
   let scan_result_json = exec(exec_query).toString()
   res.header({'Content-type': 'application/json'})
