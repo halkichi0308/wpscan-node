@@ -4,6 +4,10 @@ const app = express()
 
 const port = 3000
 
+app.get('/ack', (req, res) => {
+  res.send(200, 'instance ok!')
+})
+
 app.get('/scan', (req, res) => {
   console.log(req.query.url)
   let exec_query = `docker run -t wpscanteam/wpscan --url ${req.query.url}`
