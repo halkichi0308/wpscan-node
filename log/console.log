@@ -1,0 +1,1 @@
+Error: Command failed: sudo docker run -t wpscanteam/wpscan --url http://ec2-13-230-97-36.ap-northeast-1.compute.amazonaws.com/wordpress/index.php/2019/12/10/hello-world/ -f json

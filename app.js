@@ -2,8 +2,16 @@ const express = require('express')
 const exec = require('child_process').execSync;
 const fs = require('fs')
 const app = express()
-const log_file = './log/console.log'
-
+function getNowYMD(){
+  var dt = new Date();
+  var y = dt.getFullYear();
+  var m = ("00" + (dt.getMonth()+1)).slice(-2);
+  var d = ("00" + dt.getDate()).slice(-2);
+	var h = ("00" + dt.getHours()).slice(-2);
+  var result = "" + y  + m + d+h;
+  return result;
+}
+const log_file = getNowYMD()
 const access_limit = 100
 app.locals.access_count = 0
 
